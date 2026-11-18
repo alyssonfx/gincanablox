@@ -59,7 +59,7 @@ body.clean #top,body.clean #side{display:none}body.clean #unhide{display:block}
 .chip{background:var(--card);border-radius:10px;padding:6px 14px 6px 6px;display:flex;gap:10px;align-items:center;font-size:14px}
 @media(max-width:760px){#wrap{flex-direction:column}#side{width:auto;flex-direction:row;padding:6px}#main{padding:14px}.cols{grid-template-columns:1fr}.gc{flex-direction:column}.teams{gap:8px}.tb{font-size:14px}}
 </style></head><body>
-<header id="top"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="4" y="4" width="18" height="18" rx="3" transform="rotate(20 13 13)" fill="#fff"/><rect x="10" y="10" width="6" height="6" transform="rotate(20 13 13)" fill="#191a1c"/></svg><b>Gincanablox</b><span id="st" style="color:var(--mu);font-size:13px"></span><button class="b2" data-a="hide">Esconder menus</button></header>
+<header id="top"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="4" y="4" width="18" height="18" rx="3" transform="rotate(20 13 13)" fill="#fff"/><rect x="10" y="10" width="6" height="6" transform="rotate(20 13 13)" fill="#191a1c"/></svg><b>Gincanablox</b><button class="b2" data-a="exp">Exportar</button><button class="b2" data-a="imp">Importar</button><input type="file" id="impf" accept=".json,application/json" hidden><button class="b2" data-a="hide">Esconder menus</button></header>
 <div id="wrap"><nav id="side"></nav><main id="main"></main></div>
 <button id="unhide" class="b2" data-a="show">Mostrar menus</button>
 <script>
@@ -68,8 +68,7 @@ const TEAMS={disco:{n:"Disco",c:"#ee4b45",e:"💿"},lango:{n:"Lango",c:"#2fcf6b"
 const SCORING=[5,4,3]; // pontos do 1º, 2º e 3º lugar — mude aqui
 let S={players:[],games:[],up:[]};
 try{S=Object.assign(S,JSON.parse(localStorage.gincanablox||"{}"))}catch(e){}
-const loc=()=>{try{localStorage.gincanablox=JSON.stringify(S)}catch(e){if(!DB)alert("Não foi possível salvar: o armazenamento do navegador está cheio.")}};
-const save=()=>{loc();push()};
+const save=()=>{try{localStorage.gincanablox=JSON.stringify(S)}catch(e){alert("Não foi possível salvar: o armazenamento do navegador está cheio.")}};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const U=u=>"@"+u.replace(/^@/,"");
 const nm=p=>p.dn||p.rn||U(p.du||p.ru);
@@ -158,10 +157,24 @@ function render(){const p=PG[location.hash.slice(1)]?location.hash.slice(1):"pla
  $("#side").innerHTML=NAV.map(([k,l])=>`<a href="#${k}" class="${k===p?"on":""}">${l}</a>`).join("");
  $("#main").className=p==="placar"?"hm":"";$("#main").innerHTML=PG[p]()}
 
+/* exportar / importar (arquivo .json com todos os dados) */
+async function exportar(){
+ const data=JSON.stringify({app:"gincanablox",v:1,players:S.players,games:S.games,up:S.up},null,1),filename="gincanablox-"+new Date().toISOString().slice(0,10)+".json";
+ try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}catch(e){alert("Não foi possível exportar.")}}
+$("#impf").addEventListener("change",e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const r=new FileReader();
+ r.onload=()=>{try{const d=JSON.parse(r.result),ok=a=>Array.isArray(a)&&a.every(x=>x&&typeof x==="object");
+  if(!ok(d.players)||!ok(d.games)||!ok(d.up))throw 0;
+  if(!confirm("Importar vai substituir TODOS os dados atuais ("+d.players.length+" participantes, "+d.games.length+" jogos, "+d.up.length+" próximos jogos). Continuar?"))return;
+  const fix=a=>a.map(x=>({...x,id:String(x.id||uid())}));
+  S.players=fix(d.players).map(p=>({...p,team:TEAMS[p.team]?p.team:"disco"}));
+  S.games=fix(d.games).map(g=>({...g,rounds:(Array.isArray(g.rounds)?g.rounds:[]).map(r=>({...r,id:String(r.id||uid()),places:Array.isArray(r.places)?r.places.slice(0,3).map(String):["","",""]}))}));
+  S.up=fix(d.up);fG="";save();render()}catch(x){alert("Arquivo inválido: use um arquivo exportado pelo Gincanablox.")}};
+ r.readAsText(f)});
+
 /* ações */
 const find=(l,id)=>l.find(x=>x.id===id);
 const A={
- hide:()=>document.body.classList.add("clean"),show:()=>document.body.classList.remove("clean"),
+ hide:()=>document.body.classList.add("clean"),show:()=>document.body.classList.remove("clean"),exp:exportar,imp:()=>$("#impf").click(),
  np:()=>pModal(),ep:id=>pModal(find(S.players,id)),
  tp:id=>{const p=find(S.players,id);p.team=p.team==="disco"?"lango":"disco";save();render()},
  dp:id=>{if(confirm("Remover este participante? Os pontos dele saem do placar."))
@@ -183,20 +196,4 @@ document.addEventListener("change",e=>{const t=e.target;
 document.addEventListener("input",e=>{if(e.target.id==="q"){fQ=e.target.value;$("#rk").innerHTML=rk()}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")A.show()});
 addEventListener("hashchange",render);render();
-
-/* ===== SINCRONIZAÇÃO (API do site: /api/state, banco Redis no Vercel) ===== */
-let DB=false,busy=false,again=false;const C=["players","games","up"],known={players:{},games:{},up:{}};
-const cj=v=>Array.isArray(v)?"["+v.map(cj)+"]":v&&typeof v==="object"?"{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+cj(v[k])).join(",")+"}":JSON.stringify(v);
-const st=t=>{$("#st").textContent=t};
-const applyC=(c,list)=>{const n=list.slice().sort((a,b)=>a.o-b.o);known[c]={};n.forEach(d=>known[c][d.id]=cj(d));const items=n.map(({o,...x})=>x);if(cj(items)===cj(S[c]))return false;S[c]=items;return true};
-async function pull(){const r=await fetch("/api/state",{cache:"no-store"});if(!r.ok)throw 0;const d=await r.json();DB=true;let ch=0;C.forEach(c=>{if(applyC(c,d[c]||[]))ch=1});if(ch){loc();render()}return C.some(c=>(d[c]||[]).length)}
-async function push(){if(!DB)return;if(busy){again=true;return}busy=true;
- try{do{again=false;const set=[],del=[];
-  C.forEach(c=>{const ids=new Set();S[c].forEach((it,i)=>{const d={...it,o:i};ids.add(it.id);if(known[c][it.id]!==cj(d))set.push([c,d])});Object.keys(known[c]).forEach(id=>{if(!ids.has(id))del.push([c,id])})});
-  if(set.length||del.length){const r=await fetch("/api/state",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({set,del})});if(!r.ok)throw 0;set.forEach(([c,d])=>known[c][d.id]=cj(d));del.forEach(([c,id])=>delete known[c][id])}
- }while(again);st("ao vivo")}
- catch(e){st("erro ao salvar")}
- finally{busy=false}}
-(async()=>{try{if(!await pull()&&C.some(c=>S[c].length))await push();st("ao vivo")}catch(e){st("só neste navegador")}
- setInterval(async()=>{if(!DB||busy||document.hidden||document.querySelector(".ov")||$("#q:focus"))return;try{await pull()}catch(e){}},4000)})();
 </script></body></html>
