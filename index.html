@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gincanablox</title>
+<style>
+:root{--bg:#232527;--bar:#191a1c;--card:#393b3d;--card2:#2c2e30;--line:#4a4c4f;--mu:#bdbebe;--blue:#335fff;--red:#e8433f}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:#fff;font:16px/1.4 "Builder Sans","Gotham SSm",Arial,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:8px 16px;color:#fff;cursor:pointer}
+.b1{background:var(--blue)}.b2{background:var(--line)}.b3{background:#6b2a2a}
+.b1:hover{filter:brightness(1.15)}.b2:hover{background:#5d5f62}.b3:hover{background:var(--red)}
+input,select,textarea{font:inherit;background:var(--card2);color:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+#top{height:48px;background:var(--bar);display:flex;align-items:center;gap:10px;padding:0 16px;flex:none;border-bottom:1px solid #000}
+#top b{font-size:20px;flex:1}
+#wrap{flex:1;display:flex;min-height:0}
+#side{width:200px;background:var(--bar);padding:12px 8px;display:flex;flex-direction:column;gap:2px;flex:none;overflow:auto}
+#side a{padding:10px 12px;border-radius:8px;font-weight:700;color:var(--mu);white-space:nowrap}
+#side a:hover{background:#2a2c2e;color:#fff}#side a.on{background:var(--card);color:#fff}
+#main{flex:1;overflow:auto;padding:24px;min-width:0}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px}
+h1{font-size:28px}h2{font-size:20px}h3{font-size:15px;margin:10px 0 4px;color:var(--mu)}
+.card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:12px}
+.em{color:var(--mu);padding:12px 0}
+.ac{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.ac button{padding:6px 12px;font-size:14px}
+.bd{display:inline-flex;align-items:center;gap:5px;color:var(--c);font-weight:700;font-size:13px;vertical-align:middle}
+.ic{border-radius:12px;object-fit:cover;background:var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.id{margin-bottom:6px}.id small{display:block;color:var(--mu);font-size:12px}.id span{color:var(--mu);font-size:13px;margin-left:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.cols section>h2{color:var(--c);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.cols section>h2 small{color:var(--mu)}
+.pc{border-left:5px solid var(--c)}
+.gc{display:flex;gap:16px}.gb{flex:1;min-width:0}.gb p{color:var(--mu)}
+.rl{margin-top:10px}.rd{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;background:var(--card2);border-radius:8px;padding:8px 12px;margin-bottom:6px}
+.rd button{padding:3px 10px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.uc{margin:0;display:flex;flex-direction:column;gap:6px}.uc .ic{width:100%!important;height:auto!important;aspect-ratio:1}
+.uc p{color:var(--mu);font-size:14px}.uc .dt{color:#7dd3fc;font-weight:700;font-size:14px}
+.tb{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden}
+.tb th{background:var(--card2);text-align:left;padding:12px}.tb td{padding:10px 12px;border-top:1px solid var(--line)}
+.tb td small{color:var(--mu)}.tb .n{text-align:center}.tot td{font-weight:800;font-size:18px;background:var(--card2)}
+.ldr{background:var(--card);border-radius:12px;padding:14px 18px;font-weight:800;font-size:20px;margin-bottom:14px}
+.fl{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}.fl>*{flex:1;min-width:150px}
+.ov{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;z-index:9;padding:12px}
+.dlg{background:var(--card);border-radius:14px;padding:22px;width:440px;max-width:100%;max-height:92vh;overflow:auto}
+.dlg h2{margin-bottom:8px}.dlg label{display:block;margin-top:10px;color:var(--mu);font-size:14px}.dlg label>*{margin-top:4px;color:#fff}
+.dlg .row{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.sel{display:flex;align-items:center;gap:8px}.sel select{flex:1}.pv{margin-top:8px}
+#unhide{display:none;position:fixed;right:10px;bottom:10px;opacity:.15;z-index:5}#unhide:hover{opacity:1}
+body.clean #top,body.clean #side{display:none}body.clean #unhide{display:block}
+#main.hm{overflow:hidden;padding:2vh 3vw}
+.home{height:100%;max-width:960px;margin:0 auto;display:flex;flex-direction:column;justify-content:center;gap:3vh}
+.home h1{text-align:center;font-size:clamp(18px,3.2vh,30px)}
+.lead{text-align:center;font-size:clamp(14px,2.4vh,22px);font-weight:700;color:var(--mu)}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:2vw;padding-top:2vh}
+.tp{position:relative;background:var(--card);border-radius:16px;border:4px solid transparent;display:flex;flex-direction:column;align-items:center;padding:4.5vh 1vh 3vh}
+.tp.win{border-color:var(--c)}.tag{position:absolute;top:0;left:50%;transform:translate(-50%,-50%);background:var(--c);color:#111;font-weight:800;font-size:clamp(12px,2vh,16px);padding:2px 14px;border-radius:20px}.nm{display:flex;align-items:center;gap:12px}.tile{width:clamp(36px,6vh,56px);aspect-ratio:1;border-radius:12px;background:var(--card2);display:flex;align-items:center;justify-content:center}.tile .emo{font-size:clamp(22px,3.8vh,34px)!important}.emo{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;line-height:1}
+.tp h2{font-size:clamp(20px,4vh,36px);color:var(--c)}
+.pts{font-size:clamp(48px,12vh,120px);font-weight:800;line-height:1;margin-top:2vh}.tp .pl{color:var(--mu);font-size:clamp(13px,2vh,18px)}
+.strip{display:flex;flex-wrap:wrap;justify-content:center;gap:1vh 1vw;max-height:20vh;overflow:hidden}
+.chip{background:var(--card);border-radius:10px;padding:6px 14px 6px 6px;display:flex;gap:10px;align-items:center;font-size:14px}
+@media(max-width:760px){#wrap{flex-direction:column}#side{width:auto;flex-direction:row;padding:6px}#main{padding:14px}.cols{grid-template-columns:1fr}.gc{flex-direction:column}.teams{gap:8px}.tb{font-size:14px}}
+</style></head><body>
+<header id="top"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="4" y="4" width="18" height="18" rx="3" transform="rotate(20 13 13)" fill="#fff"/><rect x="10" y="10" width="6" height="6" transform="rotate(20 13 13)" fill="#191a1c"/></svg><b>Gincanablox</b><span id="st" style="color:var(--mu);font-size:13px"></span><button class="b2" data-a="hide">Esconder menus</button></header>
+<div id="wrap"><nav id="side"></nav><main id="main"></main></div>
+<button id="unhide" class="b2" data-a="show">Mostrar menus</button>
+<script>
+/* ===== DADOS ===== */
+const TEAMS={disco:{n:"Disco",c:"#ee4b45",e:"💿"},lango:{n:"Lango",c:"#2fcf6b",e:"🦎"}};
+const SCORING=[5,4,3]; // pontos do 1º, 2º e 3º lugar — mude aqui
+let S={players:[],games:[],up:[]};
+try{S=Object.assign(S,JSON.parse(localStorage.gincanablox||"{}"))}catch(e){}
+const loc=()=>{try{localStorage.gincanablox=JSON.stringify(S)}catch(e){if(!DB)alert("Não foi possível salvar: o armazenamento do navegador está cheio.")}};
+const save=()=>{loc();push()};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const U=u=>"@"+u.replace(/^@/,"");
+const nm=p=>p.dn||p.rn||U(p.du||p.ru);
+const sub=p=>(p.dn||p.rn)?(p.du?U(p.du):p.ru?U(p.ru):""):"";
+const pl=id=>S.players.find(p=>p.id===id);
+
+/* ===== REGRAS DE PONTUAÇÃO (sem interface) — tudo é recalculado a partir das rodadas ===== */
+const Score={
+ players(gid){const m={};S.players.forEach(p=>m[p.id]={p,pts:0,c:[0,0,0]});
+  S.games.forEach(g=>{if(gid&&g.id!==gid)return;g.rounds.forEach(r=>r.places.forEach((id,i)=>{const e=m[id];if(e){e.pts+=SCORING[i];e.c[i]++}}))});
+  return Object.values(m).sort((a,b)=>b.pts-a.pts||b.c[0]-a.c[0]||b.c[1]-a.c[1]||b.c[2]-a.c[2]||nm(a.p).localeCompare(nm(b.p)))},
+ game(g){const t={disco:0,lango:0};g.rounds.forEach(r=>r.places.forEach((id,i)=>{const p=pl(id);if(p)t[p.team]+=SCORING[i]}));return t},
+ teams(){const t={disco:0,lango:0};S.games.forEach(g=>{const x=Score.game(g);t.disco+=x.disco;t.lango+=x.lango});return t},
+ lead(){const t=Score.teams(),d=t.disco-t.lango;return{t,d,w:d>0?"disco":d<0?"lango":null}},
+ played:()=>S.games.filter(g=>g.rounds.length)
+};
+
+/* ===== INTERFACE ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sym=(t,s=24)=>`<span class="emo" style="font-size:${s*.85}px">${TEAMS[t].e}</span>`;
+const badge=t=>t?`<span class="bd" style="--c:${TEAMS[t].c}">${sym(t,16)}${TEAMS[t].n}</span>`:"";
+const ic=(o,s=64)=>o.icon?`<img class="ic" style="width:${s}px;height:${s}px" src="${o.icon}">`:`<div class="ic" style="width:${s}px;height:${s}px;font-size:${s/2}px">${esc((o.name||"?")[0].toUpperCase())}</div>`;
+const ident=(l,a,u)=>a||u?`<div class="id"><small>${l}</small><b>${esc(a||U(u))}</b>${a&&u?`<span>${esc(U(u))}</span>`:""}</div>`:"";
+const fld=(l,n,v="")=>`<label>${l}<input name="${n}" value="${esc(v)}" autocomplete="off"></label>`;
+const teamOpts=sel=>Object.keys(TEAMS).map(k=>`<option value="${k}" ${sel===k?"selected":""}>Time ${TEAMS[k].n}</option>`).join("");
+const EM='<p class="em">Nada por aqui ainda.</p>';
+const leadTxt=()=>{const{d,w}=Score.lead(),a=Math.abs(d);return !Score.played().length?"Nenhum jogo pontuado ainda":w?`Time ${TEAMS[w].n} na frente por ${a} ponto${a>1?"s":""}`:"Empate"};
+
+function modal(title,html,ok){
+ const m=document.createElement("div");m.className="ov";
+ m.innerHTML=`<form class="dlg"><h2>${title}</h2>${html}<div class="row"><button type="button" class="b2" data-x>Cancelar</button><button class="b1">Salvar</button></div></form>`;
+ document.body.append(m);
+ m.querySelector("[data-x]").onclick=()=>m.remove();
+ m.querySelector("form").onsubmit=e=>{e.preventDefault();if(ok(e.target)!==false){m.remove();save();render()}};
+ const f=m.querySelector("input:not([type=file]),select");f&&f.focus();
+}
+function img(file,cb){const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const c=document.createElement("canvas");c.width=c.height=160;const s=Math.min(i.width,i.height);c.getContext("2d").drawImage(i,(i.width-s)/2,(i.height-s)/2,s,s,0,0,160,160);cb(c.toDataURL("image/jpeg",.82))};i.src=r.result};r.readAsDataURL(file)}
+
+function pModal(p){const n=!p;const q=p||{team:"disco"};
+ modal(n?"Novo participante":"Editar participante",`<h3>Discord</h3>${fld("Apelido","dn",q.dn)}${fld("@username","du",q.du)}<h3>Roblox</h3>${fld("Display name","rn",q.rn)}${fld("Username","ru",q.ru)}<label>Time<select name="team">${teamOpts(q.team)}</select></label>`,f=>{
+  const e=f.elements,v={};["dn","du","rn","ru"].forEach(k=>v[k]=e[k].value.trim());
+  if(!v.dn&&!v.du&&!v.rn&&!v.ru){alert("Informe pelo menos um identificador (Discord ou Roblox).");return false}
+  v.team=e.team.value;n?S.players.push({id:uid(),...v}):Object.assign(pl(p.id)||p,v)})}
+
+function gModal(g,up){const n=!g;const q=g||{};
+ modal(n?(up?"Novo próximo jogo":"Novo jogo"):"Editar jogo",`<label>Ícone (imagem quadrada)<input type="file" accept="image/*"></label><div class="pv">${q.icon?ic(q,72):""}</div>${fld("Nome","nome",q.name)}<label>Descrição<textarea name="desc" rows="3">${esc(q.desc)}</textarea></label>${up?`<label>Data (opcional)<input type="date" name="date" value="${esc(q.date)}"></label><label>Horário (opcional)<input type="time" name="time" value="${esc(q.time)}"></label>`:""}`,f=>{
+  const e=f.elements;if(!e.nome.value.trim()){alert("Informe o nome do jogo.");return false}
+  const v={name:e.nome.value.trim(),desc:e.desc.value.trim(),icon:f.dataset.icon||q.icon||""};
+  if(up){v.date=e.date.value;v.time=e.time.value}
+  n?(up?S.up:S.games).push({id:uid(),...(up?{}:{rounds:[]}),...v}):Object.assign(find(up?S.up:S.games,g.id)||g,v)})}
+
+function rModal(gid,rid){
+ if(!S.players.length){alert("Cadastre participantes antes de criar uma rodada.");return}
+ const g=S.games.find(x=>x.id===gid),r=g.rounds.find(x=>x.id===rid),cur=r?r.places:["","",""];
+ modal(r?"Editar rodada":"Nova rodada — "+esc(g.name),[0,1,2].map(i=>`<label>${i+1}º lugar (${SCORING[i]} pts)<span class="sel"><select name="p${i}" data-pl><option value="">— escolher —</option>${S.players.map(p=>`<option value="${p.id}" ${cur[i]===p.id?"selected":""}>${esc(nm(p))}</option>`).join("")}</select><span class="tb2">${badge((pl(cur[i])||{}).team)}</span></span></label>`).join(""),f=>{
+  const v=[0,1,2].map(i=>f.elements["p"+i].value),s=v.filter(Boolean);
+  if(!v[0]){alert("Escolha pelo menos o 1º lugar.");return false}
+  if(new Set(s).size!==s.length){alert("O mesmo participante não pode ocupar duas colocações.");return false}
+  const G=find(S.games,gid)||g,R=G.rounds.find(x=>x.id===rid)||r;R?R.places=v:G.rounds.push({id:uid(),places:v})})}
+
+/* páginas */
+const home=()=>{const{t,w}=Score.lead();
+ const panel=k=>`<div class="tp ${w===k?"win":""}" style="--c:${TEAMS[k].c}"><span class="tag">Time</span><div class="nm"><div class="tile">${sym(k,40)}</div><h2>${TEAMS[k].n}</h2></div><div class="pts">${t[k]}</div><div class="pl">pontos</div></div>`;
+ return `<div class="home"><h1>Gincanablox</h1><div class="lead">${leadTxt()}</div><div class="teams">${panel("disco")}${panel("lango")}</div><div class="strip">${Score.played().map(g=>{const x=Score.game(g);return `<div class="chip">${ic(g,36)}<div><b>${esc(g.name)}</b><br><b style="color:${TEAMS.disco.c}">${x.disco}</b> x <b style="color:${TEAMS.lango.c}">${x.lango}</b></div></div>`}).join("")}</div></div>`};
+
+const sheet=()=>{const l=Score.played(),t=Score.teams();
+ return `<div class="ph"><h1>Planilha</h1></div><div class="ldr">${leadTxt()}</div>${l.length?`<table class="tb"><tr><th>Jogo</th>${Object.keys(TEAMS).map(k=>`<th class="n" style="color:${TEAMS[k].c}">${TEAMS[k].n}</th>`).join("")}</tr>${l.map(g=>{const x=Score.game(g);return `<tr><td>${esc(g.name)} <small>(${g.rounds.length} rodada${g.rounds.length>1?"s":""})</small></td><td class="n">${x.disco}</td><td class="n">${x.lango}</td></tr>`}).join("")}<tr class="tot"><td>Total</td><td class="n">${t.disco}</td><td class="n">${t.lango}</td></tr></table>`:EM}`};
+
+let fT="",fG="",fQ="";
+const rk=()=>{const q=fQ.toLowerCase(),r=Score.players(fG).filter(e=>(!fT||e.p.team===fT)&&(!q||[e.p.dn,e.p.du,e.p.rn,e.p.ru].join(" ").toLowerCase().includes(q)));
+ return r.length?`<table class="tb"><tr><th>#</th><th>Jogador</th><th>Time</th><th class="n">1º</th><th class="n">2º</th><th class="n">3º</th><th class="n">Pontos</th></tr>${r.map((e,i)=>`<tr><td>${i+1}</td><td><b>${esc(nm(e.p))}</b> <small>${esc(sub(e.p))}</small></td><td>${badge(e.p.team)}</td><td class="n">${e.c[0]}</td><td class="n">${e.c[1]}</td><td class="n">${e.c[2]}</td><td class="n"><b>${e.pts}</b></td></tr>`).join("")}</table>`:EM};
+const rank=()=>`<div class="ph"><h1>Ranking de jogadores</h1></div><div class="fl"><input id="q" placeholder="Buscar por nome..." value="${esc(fQ)}"><select id="ft"><option value="">Todos os times</option>${teamOpts(fT)}</select><select id="fg"><option value="">Todos os jogos</option>${S.games.map(g=>`<option value="${g.id}" ${fG===g.id?"selected":""}>${esc(g.name)}</option>`).join("")}</select></div><div id="rk">${rk()}</div>`;
+
+const pcard=p=>`<div class="card pc">${ident("Discord",p.dn,p.du)}${ident("Roblox",p.rn,p.ru)}<div class="ac"><button class="b2" data-a="ep" data-id="${p.id}">Editar</button><button class="b2" data-a="tp" data-id="${p.id}">Trocar de time</button><button class="b3" data-a="dp" data-id="${p.id}">Remover</button></div></div>`;
+const parts=()=>`<div class="ph"><h1>Participantes</h1><button class="b1" data-a="np">+ Participante</button></div><div class="cols">${Object.keys(TEAMS).map(k=>{const l=S.players.filter(p=>p.team===k);return `<section style="--c:${TEAMS[k].c}"><h2>${sym(k,28)} ${TEAMS[k].n} <small>(${l.length})</small></h2>${l.map(p=>pcard(p).replace('class="card pc"','class="card pc" style="--c:'+TEAMS[k].c+'"')).join("")||'<p class="em">Sem participantes.</p>'}</section>`}).join("")}</div>`;
+
+const games=()=>`<div class="ph"><h1>Jogos e rodadas</h1><button class="b1" data-a="ng">+ Jogo</button></div>${S.games.map(g=>`<div class="card gc">${ic(g,72)}<div class="gb"><h2>${esc(g.name)}</h2><p>${esc(g.desc)}</p><div class="rl">${g.rounds.map((r,i)=>`<div class="rd"><b>Rodada ${i+1}</b>${r.places.map((id,j)=>{const p=pl(id);return p?`<span>${j+1}º ${esc(nm(p))} ${badge(p.team)}</span>`:""}).join("")}<button class="b2" data-a="er" data-id="${g.id}" data-k="${r.id}">Editar</button><button class="b3" data-a="dr" data-id="${g.id}" data-k="${r.id}">Excluir</button></div>`).join("")}</div><div class="ac"><button class="b1" data-a="nr" data-id="${g.id}">+ Nova rodada</button><button class="b2" data-a="eg" data-id="${g.id}">Editar jogo</button><button class="b3" data-a="dg" data-id="${g.id}">Excluir jogo</button></div></div></div>`).join("")||EM}`;
+
+const fmt=g=>[g.date&&g.date.split("-").reverse().join("/"),g.time].filter(Boolean).join(" às ");
+const ups=()=>`<div class="ph"><h1>Próximos jogos</h1><button class="b1" data-a="nu">+ Próximo jogo</button></div><div class="grid">${S.up.map(g=>`<div class="card uc">${ic(g,140)}<h2>${esc(g.name)}</h2><p>${esc(g.desc)}</p>${fmt(g)?`<div class="dt">${fmt(g)}</div>`:""}<div class="ac"><button class="b2" data-a="mv" data-id="${g.id}" data-k="-1" title="Mover para antes">◀</button><button class="b2" data-a="mv" data-id="${g.id}" data-k="1" title="Mover para depois">▶</button><button class="b2" data-a="eu" data-id="${g.id}">Editar</button><button class="b3" data-a="xu" data-id="${g.id}">Excluir</button><button class="b1" data-a="pu" data-id="${g.id}">Marcar como jogado</button></div></div>`).join("")}</div>${S.up.length?"":EM}`;
+
+const PG={placar:home,planilha:sheet,ranking:rank,participantes:parts,jogos:games,proximos:ups};
+const NAV=[["placar","Placar"],["planilha","Planilha"],["ranking","Ranking"],["participantes","Participantes"],["jogos","Jogos e rodadas"],["proximos","Próximos jogos"]];
+function render(){const p=PG[location.hash.slice(1)]?location.hash.slice(1):"placar";
+ $("#side").innerHTML=NAV.map(([k,l])=>`<a href="#${k}" class="${k===p?"on":""}">${l}</a>`).join("");
+ $("#main").className=p==="placar"?"hm":"";$("#main").innerHTML=PG[p]()}
+
+/* ações */
+const find=(l,id)=>l.find(x=>x.id===id);
+const A={
+ hide:()=>document.body.classList.add("clean"),show:()=>document.body.classList.remove("clean"),
+ np:()=>pModal(),ep:id=>pModal(find(S.players,id)),
+ tp:id=>{const p=find(S.players,id);p.team=p.team==="disco"?"lango":"disco";save();render()},
+ dp:id=>{if(confirm("Remover este participante? Os pontos dele saem do placar."))
+  {S.players=S.players.filter(p=>p.id!==id);S.games.forEach(g=>g.rounds.forEach(r=>r.places=r.places.map(x=>x===id?"":x)));save();render()}},
+ ng:()=>gModal(),eg:id=>gModal(find(S.games,id)),
+ dg:id=>{if(confirm("Excluir este jogo e todas as rodadas dele?")){S.games=S.games.filter(g=>g.id!==id);if(fG===id)fG="";save();render()}},
+ nr:id=>rModal(id),er:(id,k)=>rModal(id,k),
+ dr:(id,k)=>{if(confirm("Excluir esta rodada? Os pontos serão recalculados.")){const g=find(S.games,id);g.rounds=g.rounds.filter(r=>r.id!==k);save();render()}},
+ nu:()=>gModal(null,1),eu:id=>gModal(find(S.up,id),1),
+ xu:id=>{if(confirm("Excluir este próximo jogo?")){S.up=S.up.filter(g=>g.id!==id);save();render()}},
+ mv:(id,k)=>{const i=S.up.findIndex(x=>x.id===id),j=i+ +k;if(j<0||j>=S.up.length)return;[S.up[i],S.up[j]]=[S.up[j],S.up[i]];save();render()},
+ pu:id=>{const g=find(S.up,id);S.games.push({id:uid(),name:g.name,desc:g.desc,icon:g.icon,rounds:[]});S.up=S.up.filter(x=>x.id!==id);save();location.hash="jogos";render()}
+};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b)A[b.dataset.a](b.dataset.id,b.dataset.k)});
+document.addEventListener("change",e=>{const t=e.target;
+ if(t.type==="file"&&t.files[0])img(t.files[0],u=>{t.form.dataset.icon=u;t.form.querySelector(".pv").innerHTML=ic({icon:u},72)});
+ else if(t.dataset.pl!==undefined)t.parentNode.querySelector(".tb2").innerHTML=badge((pl(t.value)||{}).team);
+ else if(t.id==="ft"||t.id==="fg"){t.id==="ft"?fT=t.value:fG=t.value;$("#rk").innerHTML=rk()}});
+document.addEventListener("input",e=>{if(e.target.id==="q"){fQ=e.target.value;$("#rk").innerHTML=rk()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")A.show()});
+addEventListener("hashchange",render);render();
+
+/* ===== SINCRONIZAÇÃO (API do site: /api/state, banco Redis no Vercel) ===== */
+let DB=false,busy=false,again=false;const C=["players","games","up"],known={players:{},games:{},up:{}};
+const cj=v=>Array.isArray(v)?"["+v.map(cj)+"]":v&&typeof v==="object"?"{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+cj(v[k])).join(",")+"}":JSON.stringify(v);
+const st=t=>{$("#st").textContent=t};
+const applyC=(c,list)=>{const n=list.slice().sort((a,b)=>a.o-b.o);known[c]={};n.forEach(d=>known[c][d.id]=cj(d));const items=n.map(({o,...x})=>x);if(cj(items)===cj(S[c]))return false;S[c]=items;return true};
+async function pull(){const r=await fetch("/api/state",{cache:"no-store"});if(!r.ok)throw 0;const d=await r.json();DB=true;let ch=0;C.forEach(c=>{if(applyC(c,d[c]||[]))ch=1});if(ch){loc();render()}return C.some(c=>(d[c]||[]).length)}
+async function push(){if(!DB)return;if(busy){again=true;return}busy=true;
+ try{do{again=false;const set=[],del=[];
+  C.forEach(c=>{const ids=new Set();S[c].forEach((it,i)=>{const d={...it,o:i};ids.add(it.id);if(known[c][it.id]!==cj(d))set.push([c,d])});Object.keys(known[c]).forEach(id=>{if(!ids.has(id))del.push([c,id])})});
+  if(set.length||del.length){const r=await fetch("/api/state",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({set,del})});if(!r.ok)throw 0;set.forEach(([c,d])=>known[c][d.id]=cj(d));del.forEach(([c,id])=>delete known[c][id])}
+ }while(again);st("ao vivo")}
+ catch(e){st("erro ao salvar")}
+ finally{busy=false}}
+(async()=>{try{if(!await pull()&&C.some(c=>S[c].length))await push();st("ao vivo")}catch(e){st("só neste navegador")}
+ setInterval(async()=>{if(!DB||busy||document.hidden||document.querySelector(".ov")||$("#q:focus"))return;try{await pull()}catch(e){}},4000)})();
+</script></body></html>
